@@ -212,7 +212,7 @@ HTML_TEMPLATE = """
         <button type="submit" class="btn btn-primary">Go</button>
     </form>
     {% if results %}
-      <h3><small>Results for: <span class="query-styling">"{{ results[0].query }}"</span></small></h3>
+      <h3><small>Results for:&shy;<span class="query-styling">"{{ results[0].query }}"</span></small></h3>
 
       <div class="row">
       {% for result in results %}
