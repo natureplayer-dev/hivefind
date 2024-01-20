@@ -82,19 +82,22 @@ HTML_TEMPLATE = """
         margin: 0;
     }
     footer {
+        height: 36px;
         text-align: center;
         padding: 8px;
         background-color: #333;
         color: white;
-        position: fixed;
         bottom: 0;
         width: 100%;
         font-size: 12px;
     }
-    .content-wrapper {
-        min-height: 100%;
-        position: relative;
-        padding-bottom: 50px; /* Adjust based on footer height */
+    .page-container { 
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+    .content-wrap {
+        flex: 1;
     }
     .border {
         background-color: white;
@@ -198,7 +201,8 @@ HTML_TEMPLATE = """
   </style>
 </head>
 <body>
-<div class="content-wrapper">
+<div class="page-container">
+<div class="content-wrap">
   <div class="container mt-4">
     <h2 class="mb-3"><span class="border"><span class="hl-blue">H</span><span class="hl-orange">I</span><span class="hl-yellow">V</span><span class="hl-green">E</span><span class="hl-orange">F</span><span class="hl-yellow">I</span><span class="hl-blue">N</span><span class="hl-green-last">D</span></span></h2>
     <form method="post" action="/" class="mb-3">
@@ -228,9 +232,10 @@ HTML_TEMPLATE = """
     {% endif %}
   </div>
 </div>
-  <footer>
-        Made with love by <spa><a href="https://twitter.com/natureplayer_" class="footer-link">natureplayer</a>.
-  </footer>   
+<footer>
+    Made with love by <spa><a href="https://twitter.com/natureplayer_" class="footer-link">natureplayer</a>.
+</footer> 
+</div>  
   <!-- Bootstrap JS and its dependencies (jQuery & Popper.js) -->
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
