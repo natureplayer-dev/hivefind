@@ -152,7 +152,7 @@ HTML_TEMPLATE = """
     line-height: 39px;
     background-color: #3286F6;  /* Highlight color */
     color: white;                      /* White text color */
-    text-shadow: -1px 1px 2px #000000;  /* Horizontal offset, Vertical offset, Blur radius, Shadow color */
+    text-shadow: -1px 1px 1px #000000;  /* Horizontal offset, Vertical offset, Blur radius, Shadow color */
     border: 0px white;
     }
     .hl-yellow {
@@ -165,7 +165,7 @@ HTML_TEMPLATE = """
     line-height: 39px;
     background-color: #FDC308;  /* Highlight color */
     color: white;                      /* White text color */
-    text-shadow: -1px 1px 2px #000000;  /* Horizontal offset, Vertical offset, Blur radius, Shadow color */
+    text-shadow: -1px 1px 1px #000000;  /* Horizontal offset, Vertical offset, Blur radius, Shadow color */
     border: 0px white;
     }
     .hl-green {
@@ -178,7 +178,7 @@ HTML_TEMPLATE = """
     line-height: 39px;  
     background-color: #62D023;  /* Highlight color */
     color: white;                      /* White text color */
-    text-shadow: -1px 1px 2px #000000;  /* Horizontal offset, Vertical offset, Blur radius, Shadow color */
+    text-shadow: -1px 1px 1px #000000;  /* Horizontal offset, Vertical offset, Blur radius, Shadow color */
     border: 0px white;
     }
     .hl-green-last {
@@ -191,7 +191,7 @@ HTML_TEMPLATE = """
     line-height: 39px;  
     background-color: #62D023;  /* Highlight color */
     color: white;                      /* White text color */
-    text-shadow: -1px 1px 2px #000000;  /* Horizontal offset, Vertical offset, Blur radius, Shadow color */
+    text-shadow: -1px 1px 1px #000000;  /* Horizontal offset, Vertical offset, Blur radius, Shadow color */
     border: 0px white;
     }
     .hl-orange {
@@ -204,7 +204,7 @@ HTML_TEMPLATE = """
     line-height: 39px;
     background-color: #FE7F20;  /* Highlight color */
     color: white;                      /* White text color */
-    text-shadow: -1px 1px 2px #000000;  /* Horizontal offset, Vertical offset, Blur radius, Shadow color */
+    text-shadow: -1px 1px 1px #000000;  /* Horizontal offset, Vertical offset, Blur radius, Shadow color */
     border: 0px white;
     }
   </style>
