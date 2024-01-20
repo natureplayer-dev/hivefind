@@ -102,6 +102,7 @@ HTML_TEMPLATE = """
     margin-right: 2px;
     padding: -2px;
     box-sizing: border-box;
+    line-height: 38px;
     background-color: #3286F6;  /* Highlight color */
     color: white;                      /* White text color */
     text-shadow: -1px 1px 2px #000000;  /* Horizontal offset, Vertical offset, Blur radius, Shadow color */
@@ -114,6 +115,7 @@ HTML_TEMPLATE = """
     margin-right: 2px;
     padding: -2px;
     box-sizing: border-box;
+    line-height: 38px;
     background-color: #FDC308;  /* Highlight color */
     color: white;                      /* White text color */
     text-shadow: -1px 1px 2px #000000;  /* Horizontal offset, Vertical offset, Blur radius, Shadow color */
@@ -126,6 +128,7 @@ HTML_TEMPLATE = """
     margin-right: 2px;
     padding: -2px;
     box-sizing: border-box;
+    line-height: 38px;  
     background-color: #62D023;  /* Highlight color */
     color: white;                      /* White text color */
     text-shadow: -1px 1px 2px #000000;  /* Horizontal offset, Vertical offset, Blur radius, Shadow color */
@@ -138,6 +141,7 @@ HTML_TEMPLATE = """
     margin-right: 0px;
     padding: -2px;
     box-sizing: border-box;
+    line-height: 38px;  
     background-color: #62D023;  /* Highlight color */
     color: white;                      /* White text color */
     text-shadow: -1px 1px 2px #000000;  /* Horizontal offset, Vertical offset, Blur radius, Shadow color */
@@ -150,6 +154,7 @@ HTML_TEMPLATE = """
     margin-right: 2px;
     padding: -2px;
     box-sizing: border-box;
+    line-height: 38px;
     background-color: #FE7F20;  /* Highlight color */
     color: white;                      /* White text color */
     text-shadow: -1px 1px 2px #000000;  /* Horizontal offset, Vertical offset, Blur radius, Shadow color */
