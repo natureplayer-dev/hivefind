@@ -1,7 +1,7 @@
 import requests
 import os 
 
-from flask import Flask, request, render_template_string
+from flask import Flask, request, render_template_string, jsonify
 
 HF_API_URL = os.environ.get('HF_API_URL')
 HF_API_KEY = os.environ.get('HF_API_KEY')
@@ -16,7 +16,7 @@ def vector_query_zz(vector, limit=6):
     headers = {"content-type": "application/json", "Authorization": f"Bearer {ZZ_API_KEY}"}
     payload = {
         "collectionName": "TranscriptChunks",
-        "limit": limit,
+        "limit": int(limit),
         "outputFields": ["clip_text", "video_title", "start", "duration", "video_url"],
         "vector": vector
     }
@@ -34,8 +34,9 @@ def highlight_matches(text, query):
     return " ".join(text_arr)
 
 def find_hivemind_clip_http(query, limit=6):
+    lim_k = min(limit, 30)
     vector = embed_query_hf(query)
-    results = vector_query_zz(vector, limit=6)['data']
+    results = vector_query_zz(vector, limit=lim_k)['data']
     for idx, r in enumerate(results):
         results[idx]['video_url'] = results[idx]['video_url'].replace("watch?v=", "embed/").replace("&t=", "?start=")
         results[idx]['mins'] = int((results[idx]['start'] % 3600)/ 60)
@@ -90,6 +91,15 @@ HTML_TEMPLATE = """
         bottom: 0;
         width: 100%;
         font-size: 12px;
+    }
+    .home-button-container {
+        cursor: pointer;
+    }
+    .load-button-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 8px;
+        margin-bottom: 24px;
     }
     .page-container { 
         display: flex;
@@ -203,17 +213,18 @@ HTML_TEMPLATE = """
 <div class="page-container">
 <div class="content-wrap">
   <div class="container mt-4">
-    <h2 class="mb-3"><span class="border"><span class="hl-blue">H</span><span class="hl-orange">I</span><span class="hl-yellow">V</span><span class="hl-green">E</span><span class="hl-orange">F</span><span class="hl-yellow">I</span><span class="hl-blue">N</span><span class="hl-green-last">D</span></span></h2>
-    <form method="post" action="/" class="mb-3">
+    <h2 class="mb-3"><span id="homeButton" class="home-button-container"><span class="border"><span class="hl-blue">H</span><span class="hl-orange">I</span><span class="hl-yellow">V</span><span class="hl-green">E</span><span class="hl-orange">F</span><span class="hl-yellow">I</span><span class="hl-blue">N</span><span class="hl-green-last">D</span></span></span></h2>
+    <form method="post" action="/" class="mb-3" id="search-form">
         <div class="form-group">
-            <input type="text" name="text" class="form-control" placeholder="Search for your favorite Hivemind bits" />
+            <input id="user-input" type="text" name="text" class="form-control" placeholder="Search for your favorite Hivemind bits" value="{{ user_input|default('') }}"/>
+            <input type="hidden" id="limit-input" name="limit" value="{{ limit }}">
         </div>
-        <button type="submit" class="btn btn-primary">Go</button>
+        <button type="submit" onclick="loadQuery()" class="btn btn-primary">Go</button>
     </form>
     {% if results %}
       <h3><small>Results for: &shy;<span class="query-styling">"{{ results[0].query }}"</span></small></h3>
 
-      <div class="row">
+      <div class="row" id="results-container">
       {% for result in results %}
         <div class="col-md-6 col-lg-4 mb-3">
           <div class="card h-100">
@@ -228,6 +239,11 @@ HTML_TEMPLATE = """
         </div>
       {% endfor %}
       </div>
+      {% if limit < 30 %}
+        <div class="load-button-container">
+        <button onclick="loadMore()" class="btn btn-primary">Show more</button>
+        </div>
+      {% endif %}
     {% endif %}
   </div>
 </div>
@@ -241,25 +257,55 @@ HTML_TEMPLATE = """
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 <script>
+    function loadMore() {
+        let currentLimit = parseInt(document.getElementById('limit-input').value);
+        const newLimit = currentLimit + 6;
+        document.getElementById('limit-input').value = newLimit;
+
+        // Trigger form submission
+        document.getElementById('search-form').submit();
+    }
+    function loadQuery() {
+        let currentLimit = parseInt(document.getElementById('limit-input').value);
+        const newLimit = 6;
+        document.getElementById('limit-input').value = newLimit;
+
+        // Trigger form submission
+        document.getElementById('search-form').submit();
+    }
+</script>
+<script>
+    document.getElementById('homeButton').addEventListener('click', function() {
+        let currentLimit = parseInt(document.getElementById('limit-input').value);
+        document.getElementById('limit-input').value = 6;
+        document.getElementById('user-input').value = "";
+
+        document.getElementById('search-form').submit();
+    });
+</script>
+<script>
   window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
 </script>
 <script defer src="/_vercel/insights/script.js"></script>
 </html>
 """
 
+from flask import request, render_template_string, jsonify
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    results = None
+    user_input = ""
+    limit = 6
+    max_results = 30
     if request.method == 'POST':
         user_input = request.form['text'].strip()
 
-        if not user_input:
-            # If the input is empty, do not proceed further
-            return render_template_string(HTML_TEMPLATE, results=None)
+        if 'limit' in request.form:
+            limit = int(request.form['limit'])
         
-        results = find_hivemind_clip_http(user_input)
+    results = find_hivemind_clip_http(user_input, min(max_results, limit)) if user_input else None
 
-    return render_template_string(HTML_TEMPLATE, results=results)
+    return render_template_string(HTML_TEMPLATE, results=results, user_input=user_input, limit=limit)
 
 if __name__ == '__main__':
     app.run(debug=True)
