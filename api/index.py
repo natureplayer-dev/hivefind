@@ -1,4 +1,4 @@
-from requests import post
+import requests
 import os 
 
 from flask import Flask, request, render_template_string
@@ -10,7 +10,7 @@ ZZ_API_KEY = os.environ.get('ZZ_API_KEY')
 
 def embed_query_hf(query):
     headers = {"Authorization": f"Bearer {HF_API_KEY}"}
-    return post(HF_API_URL, headers=headers, json={'inputs': query}).json()
+    return requests.post(HF_API_URL, headers=headers, json={'inputs': query}).json()
 
 def vector_query_zz(vector):
     headers = {"content-type": "application/json", "Authorization": f"Bearer {ZZ_API_KEY}"}
@@ -20,7 +20,7 @@ def vector_query_zz(vector):
         "outputFields": ["clip_text", "video_title", "start", "duration", "video_url"],
         "vector": vector
     }
-    return post(ZZ_API_URL, headers=headers, json=payload).json() 
+    return requests.post(ZZ_API_URL, headers=headers, json=payload).json() 
 
 def find_hivemind_clip_http(query):
     vector = embed_query_hf(query)
