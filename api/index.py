@@ -122,12 +122,13 @@ HTML_TEMPLATE = """
     .query-styling {
         padding: 
         display: inline-block;
-        color: #6C757D;
+        color: #495057;
         background-color: #FFFACD;
-        border-radius: 6px;
-        padding: 1px;
-        border: 1px solid #6C757D;
-        box-shadow: 0 0 1px #6C757D;
+        border-radius: 4px;
+        padding: 4px;
+        border: 1px solid #495057;
+        box-shadow: 0 0 1px #495057;
+        font-size: 12pt;
     }
     .hl-blue {
     display: inline-block;
