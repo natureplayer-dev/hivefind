@@ -123,7 +123,6 @@ HTML_TEMPLATE = """
         color: #77CCFF;
     }
     .query-styling {
-        padding: 
         display: inline-block;
         color: #495057;
         background-color: #FFFACD;
