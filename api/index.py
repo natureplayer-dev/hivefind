@@ -40,7 +40,7 @@ def find_hivemind_clip_http(query):
             results[idx]['secs'] = "0" + str(results[idx]['secs'])
         else:
             results[idx]['secs'] = str(results[idx]['secs'])
-    results['query'] = query
+        results[idx]['query'] = query
     return results
 
 app = Flask(__name__)
@@ -82,7 +82,7 @@ HTML_TEMPLATE = """
         <button type="submit" class="btn btn-primary">GO</button>
     </form>
     {% if results %}
-      <h3>Results: <small class="text-muted"> {{results.query}} </small></h3>
+      <h3>Results: <small class="text-muted"> {{results[0].query}} </small></h3>
 
       <div class="row">
       {% for result in results %}
