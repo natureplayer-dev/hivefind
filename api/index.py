@@ -23,7 +23,7 @@ def vector_query_zz(vector):
     return requests.post(ZZ_API_URL, headers=headers, json=payload).json() 
 
 def highlight(word):
-    return f"<span class=\"highlight\">{word}</span>" 
+    return f"<span class=\"highlight\">{word}</span>" #text.replace(word, f"\033[{color_code}m{word}\033[0m")
 
 def highlight_matches(text, query):
     q_upper = [w.upper() for w in query.split()]
@@ -88,11 +88,55 @@ HTML_TEMPLATE = """
     .highlight {
     background-color: #FFFACD;  /* Highlight color */
     }
+    .hl-blue {
+    display: inline-block;
+    text-align: center;
+    width: 32px;
+    margin-right: 2px;
+    box-sizing: border-box;
+    background-color: #3286F6;  /* Highlight color */
+    color: white;                      /* White text color */
+    text-shadow: -1px 1px 2px #000000;  /* Horizontal offset, Vertical offset, Blur radius, Shadow color */
+    border: 0px white;
+    }
+    .hl-yellow {
+    display: inline-block;
+    text-align: center;
+    width: 32px;
+    margin-right: 2px;
+    box-sizing: border-box;
+    background-color: #FDC308;  /* Highlight color */
+    color: white;                      /* White text color */
+    text-shadow: -1px 1px 2px #000000;  /* Horizontal offset, Vertical offset, Blur radius, Shadow color */
+    border: 0px white;
+    }
+    .hl-green {
+    display: inline-block;
+    text-align: center;
+    width: 32px;
+    margin-right: 2px;
+    box-sizing: border-box;
+    background-color: #62D023;  /* Highlight color */
+    color: white;                      /* White text color */
+    text-shadow: -1px 1px 2px #000000;  /* Horizontal offset, Vertical offset, Blur radius, Shadow color */
+    border: 0px white;
+    }
+    .hl-orange {
+    display: inline-block;
+    text-align: center;
+    width: 32px;
+    margin-right: 2px;
+    box-sizing: border-box;
+    background-color: #FE7F20;  /* Highlight color */
+    color: white;                      /* White text color */
+    text-shadow: -1px 1px 2px #000000;  /* Horizontal offset, Vertical offset, Blur radius, Shadow color */
+    border: 0px white;
+    }
   </style>
 </head>
 <body>
   <div class="container mt-4">
-    <h2 class="mb-3">HIVEFIND</h2>
+    <h2 class="mb-3"><span class="hl-blue">H</span><span class="hl-orange">I</span><span class="hl-yellow">V</span><span class="hl-green">E</span><span class="hl-orange">F</span><span class="hl-yellow">I</span><span class="hl-blue">N</span><span class="hl-green">D</span></h2>
     <form method="post" action="/" class="mb-3">
         <div class="form-group">
             <input type="text" name="text" class="form-control" placeholder="Search for your favorite Hivemind bits" />
