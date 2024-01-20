@@ -101,6 +101,21 @@ HTML_TEMPLATE = """
         margin-top: 8px;
         margin-bottom: 24px;
     }
+    .input-group {
+        display: flex;
+        align-items: center;
+    }
+
+    #clear-button {
+        margin-left: 8px; /* Adds some space between the button and the text box */
+        border-top-left-radius: 0.25rem;  /* Rounded corners on the left side */
+        border-bottom-left-radius: 0.25rem;
+    }
+    #user-input {
+        flex-grow: 1; /* Allows the input to take up the remaining space */
+        border-top-right-radius: 0.25rem;  /* Rounded corners on the right side */
+        border-bottom-right-radius: 0.25rem;
+    }
     .page-container { 
         display: flex;
         flex-direction: column;
@@ -216,10 +231,17 @@ HTML_TEMPLATE = """
     <h2 class="mb-3"><span id="homeButton" class="home-button-container"><span class="border"><span class="hl-blue">H</span><span class="hl-orange">I</span><span class="hl-yellow">V</span><span class="hl-green">E</span><span class="hl-orange">F</span><span class="hl-yellow">I</span><span class="hl-blue">N</span><span class="hl-green-last">D</span></span></span></h2>
     <form method="post" action="/" class="mb-3" id="search-form">
         <div class="form-group">
+        <div class="input-group">
             <input id="user-input" type="text" name="text" class="form-control" placeholder="Search for your favorite Hivemind bits" value="{{ user_input|default('') }}"/>
             <input type="hidden" id="limit-input" name="limit" value="{{ limit }}">
+        {% if results %}
+          <button type="button" id="clear-button" onclick="clearText()" class="btn btn-danger">X</button>
+        {% endif %}
         </div>
+        </div>
+        <div>
         <button type="submit" onclick="loadQuery()" class="btn btn-primary">Go</button>
+        </div>
     </form>
     {% if results %}
       <h3><small>Results for: &shy;<span class="query-styling">"{{ results[0].query }}"</span></small></h3>
@@ -281,6 +303,10 @@ HTML_TEMPLATE = """
         document.getElementById('limit-input').value = newLimit;
 
         // Trigger form submission
+        document.getElementById('search-form').submit();
+    }
+    function clearText() {
+        document.getElementById('user-input').value = "";
         document.getElementById('search-form').submit();
     }
 </script>
