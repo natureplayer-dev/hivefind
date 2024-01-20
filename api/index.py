@@ -22,6 +22,17 @@ def vector_query_zz(vector):
     }
     return requests.post(ZZ_API_URL, headers=headers, json=payload).json() 
 
+def highlight(word):
+    return f"<span class=\"highlight\">{word}</span>" 
+
+def highlight_matches(text, query):
+    q_upper = [w.upper() for w in query.split()]
+    text_arr = text.split()
+    for i, w in enumerate(text_arr):
+        if w.upper() in q_upper:
+            text_arr[i] = highlight(w)
+    return " ".join(text_arr)
+
 def find_hivemind_clip_http(query):
     vector = embed_query_hf(query)
     results = vector_query_zz(vector)['data']
@@ -41,7 +52,11 @@ def find_hivemind_clip_http(query):
         else:
             results[idx]['secs'] = str(results[idx]['secs'])
         results[idx]['query'] = query
+        results[idx]['clip_text'] = highlight_matches(results[idx]['clip_text'], query)
     return results
+
+
+
 
 app = Flask(__name__)
 
@@ -70,6 +85,9 @@ HTML_TEMPLATE = """
     .embed-responsive {
       margin-top: auto;  /* Pushes video to bottom */
     }
+    .highlight {
+    background-color: #FFFACD;  /* Highlight color */
+    }
   </style>
 </head>
 <body>
@@ -90,7 +108,7 @@ HTML_TEMPLATE = """
           <div class="card h-100">
             <div class="card-body">
             <h5 class="card-title">{{ result.video_title }}<small class="text-muted"> (@ {{result.hours}}{{result.mins}}:{{result.secs}})</small></h5>
-            <p class="card-text"><strong>Caption text:</strong> {{ result.clip_text }}</p>
+            <p class="card-text"><strong>Caption text:</strong> {{ result.clip_text|safe }}</p>
             <div class="embed-responsive embed-responsive-16by9">
                 <iframe class="embed-responsive-item" src="{{ result.video_url }}" allowfullscreen></iframe>
             </div>
