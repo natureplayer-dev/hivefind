@@ -36,7 +36,10 @@ def highlight_matches(text, query):
 def find_hivemind_clip_http(query, limit=6):
     lim_k = min(limit, 30)
     vector = embed_query_hf(query)
-    results = vector_query_zz(vector, limit=lim_k)['data']
+    try:
+        results = vector_query_zz(vector, limit=lim_k)['data']
+    except KeyError:
+        return None
     for idx, r in enumerate(results):
         results[idx]['video_url'] = results[idx]['video_url'].replace("watch?v=", "embed/").replace("&t=", "?start=")
         results[idx]['mins'] = int((results[idx]['start'] % 3600)/ 60)
