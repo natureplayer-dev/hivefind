@@ -74,6 +74,27 @@ HTML_TEMPLATE = """
     /* Custom CSS for uniform card height */
     body {
         background-color: #FDC308;
+        height: 100%;
+        margin: 0;
+    }
+    html {
+        height: 100%;
+        margin: 0;
+    }
+    footer {
+        text-align: center;
+        padding: 8px;
+        background-color: #333;
+        color: white;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        font-size: 12px;
+    }
+    .content-wrapper {
+        min-height: 100%;
+        position: relative;
+        padding-bottom: 50px; /* Adjust based on footer height */
     }
     .border {
         background-color: white;
@@ -94,6 +115,19 @@ HTML_TEMPLATE = """
     }
     .highlight {
     background-color: #FFFACD;  /* Highlight color */
+    }
+    .footer-link {
+        color: #77CCFF;
+    }
+    .query-styling {
+        padding: 
+        display: inline-block;
+        color: #6C757D;
+        background-color: #FFFACD;
+        border-radius: 6px;
+        padding: 1px;
+        border: 1px solid #6C757D;
+        box-shadow: 0 0 1px #6C757D;
     }
     .hl-blue {
     display: inline-block;
@@ -163,16 +197,17 @@ HTML_TEMPLATE = """
   </style>
 </head>
 <body>
+<div class="content-wrapper">
   <div class="container mt-4">
     <h2 class="mb-3"><span class="border"><span class="hl-blue">H</span><span class="hl-orange">I</span><span class="hl-yellow">V</span><span class="hl-green">E</span><span class="hl-orange">F</span><span class="hl-yellow">I</span><span class="hl-blue">N</span><span class="hl-green-last">D</span></span></h2>
     <form method="post" action="/" class="mb-3">
         <div class="form-group">
             <input type="text" name="text" class="form-control" placeholder="Search for your favorite Hivemind bits" />
         </div>
-        <button type="submit" class="btn btn-primary">GO</button>
+        <button type="submit" class="btn btn-primary">Go</button>
     </form>
     {% if results %}
-      <h3>Results for: <small class="text-muted"> "{{ results[0].query }}" </small></h3>
+      <h3><small>Results for: <span class="query-styling">"{{ results[0].query }}"</span></small></h3>
 
       <div class="row">
       {% for result in results %}
@@ -191,6 +226,10 @@ HTML_TEMPLATE = """
       </div>
     {% endif %}
   </div>
+</div>
+  <footer>
+        Made with love by <spa><a href="https://twitter.com/natureplayer_" class="footer-link">natureplayer</a>.
+  </footer>   
   <!-- Bootstrap JS and its dependencies (jQuery & Popper.js) -->
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
