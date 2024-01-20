@@ -12,11 +12,11 @@ def embed_query_hf(query):
     headers = {"Authorization": f"Bearer {HF_API_KEY}"}
     return requests.post(HF_API_URL, headers=headers, json={'inputs': query}).json()
 
-def vector_query_zz(vector):
+def vector_query_zz(vector, limit=6):
     headers = {"content-type": "application/json", "Authorization": f"Bearer {ZZ_API_KEY}"}
     payload = {
         "collectionName": "TranscriptChunks",
-        "limit": 6,
+        "limit": limit,
         "outputFields": ["clip_text", "video_title", "start", "duration", "video_url"],
         "vector": vector
     }
@@ -33,9 +33,9 @@ def highlight_matches(text, query):
             text_arr[i] = highlight(w)
     return " ".join(text_arr)
 
-def find_hivemind_clip_http(query):
+def find_hivemind_clip_http(query, limit=6):
     vector = embed_query_hf(query)
-    results = vector_query_zz(vector)['data']
+    results = vector_query_zz(vector, limit=6)['data']
     for idx, r in enumerate(results):
         results[idx]['video_url'] = results[idx]['video_url'].replace("watch?v=", "embed/").replace("&t=", "?start=")
         results[idx]['mins'] = int((results[idx]['start'] % 3600)/ 60)
