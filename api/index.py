@@ -17,7 +17,7 @@ def vector_query_zz(vector, limit=6):
     payload = {
         "collectionName": "TranscriptChunks",
         "limit": int(limit),
-        "outputFields": ["clip_text", "video_title", "start", "duration", "video_url"],
+        "outputFields": ["clip_text", "video_title", "start", "video_url"],
         "vector": vector
     }
     return requests.post(ZZ_API_URL, headers=headers, json=payload).json() 
@@ -256,6 +256,16 @@ HTML_TEMPLATE = """
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
+<script>
+    document.addEventListener("DOMContentLoaded", function(event) { 
+        var scrollpos = localStorage.getItem('scrollpos');
+        if (scrollpos) window.scrollTo(0, scrollpos);
+    });
+
+    window.onbeforeunload = function(e) {
+        localStorage.setItem('scrollpos', window.scrollY);
+    };
+</script>
 <script>
     function loadMore() {
         let currentLimit = parseInt(document.getElementById('limit-input').value);
