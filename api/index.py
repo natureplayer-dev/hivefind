@@ -37,6 +37,7 @@ def highlight_matches(text, query):
 def find_hivemind_clip_http(query, limit=6):
     logging.basicConfig(level=logging.INFO)
     logging.info(query)
+    print(query)
     lim_k = min(limit, 30)
     vector = embed_query_hf(query)
     try:
