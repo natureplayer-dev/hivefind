@@ -62,8 +62,7 @@ def find_hivemind_clip_http(query, limit=6):
     return results
 
 
-
-app = Flask(__name__, static_folder='.', static_url_path='')
+app = Flask(__name__)#, static_folder='.', static_url_path='')
 
 # HTML template for the main page
 HTML_TEMPLATE = """
@@ -75,8 +74,8 @@ HTML_TEMPLATE = """
   <title>HIVEFIND</title>
   <!-- Bootstrap CSS -->
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="icon" href="/favicon.ico" type="image/x-icon">
-  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon">
   <script>
     window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
   </script>
