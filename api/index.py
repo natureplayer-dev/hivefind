@@ -39,7 +39,7 @@ def find_hivemind_clip_http(query, limit=6):
     try:
         results = vector_query_zz(vector, limit=lim_k)['data']
     except KeyError:
-        return None
+        return ["At capacity sorry :( Try again later"]
     for idx, r in enumerate(results):
         results[idx]['video_url'] = results[idx]['video_url'].replace("watch?v=", "embed/").replace("&t=", "?start=")
         results[idx]['mins'] = int((results[idx]['start'] % 3600)/ 60)
@@ -58,8 +58,6 @@ def find_hivemind_clip_http(query, limit=6):
         results[idx]['query'] = query
         results[idx]['clip_text'] = highlight_matches(results[idx]['clip_text'], query)
     return results
-
-
 
 
 app = Flask(__name__)
@@ -246,9 +244,11 @@ HTML_TEMPLATE = """
         <button type="submit" onclick="loadQuery()" class="btn btn-primary">Go</button>
         </div>
     </form>
-    {% if results %}
+    {% if results and results|length == 1 %}
+        <h3><small>{{ results[0] }}</small></h3>
+    {% endif %}
+    {% if results and results|length > 1 %}
       <h3><small>Results for: &shy;<span class="query-styling">"{{ results[0].query }}"</span></small></h3>
-
       <div class="row" id="results-container">
       {% for result in results %}
         <div class="col-md-6 col-lg-4 mb-3">
