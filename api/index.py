@@ -94,7 +94,6 @@ def cached_find_hivemind_clip_http(query, limit=6):
     # Try to get cached data
     cached_data = get_cache(cache_key)
 
-    print(cache_key)
     if cached_data is not None and is_successful(cached_data, limit):
         print(f"Using cached results: {cache_key}")
         return cached_data
