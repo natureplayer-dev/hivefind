@@ -2,12 +2,16 @@ import logging
 import requests
 import os 
 
-from flask import Flask, request, render_template_string, jsonify, send_from_directory, url_for
+from flask import Flask, request, render_template_string, send_from_directory
+from flask_caching import Cache
 
 HF_API_URL = os.environ.get('HF_API_URL')
 HF_API_KEY = os.environ.get('HF_API_KEY')
 ZZ_API_URL = os.environ.get('ZZ_API_URL')
 ZZ_API_KEY = os.environ.get('ZZ_API_KEY')
+
+app = Flask(__name__)
+cache = Cache(app, config={'CACHE_TYPE': 'SimpleCache'})
 
 def embed_query_hf(query):
     headers = {"Authorization": f"Bearer {HF_API_KEY}"}
@@ -35,12 +39,14 @@ def highlight_matches(text, query):
     return " ".join(text_arr)
 
 def find_hivemind_clip_http(query, limit=6):
-    print(query)
+    print(f"Querying for: {query}")
     lim_k = min(limit, 30)
     vector = embed_query_hf(query)
     try:
         results = vector_query_zz(vector, limit=lim_k)['data']
+        print("Success")
     except KeyError:
+        print("Failure")
         return ["At capacity sorry :( Try again later"]
     for idx, r in enumerate(results):
         results[idx]['video_url'] = results[idx]['video_url'].replace("watch?v=", "embed/").replace("&t=", "?start=")
@@ -62,7 +68,33 @@ def find_hivemind_clip_http(query, limit=6):
     return results
 
 
-app = Flask(__name__)#, static_folder='.', static_url_path='')
+def is_successful(cached_data, limit):
+    return len(cached_data) == limit
+
+def cached_find_hivemind_clip_http(query, limit=6):
+    cache_key = f"find_hivemind_clip:{query}:{limit}"
+
+    # Try to get cached data
+    cached_data = cache.get(cache_key)
+
+    print(cache_key)
+    if cached_data is not None and is_successful(cached_data, limit):
+        print(f"Using cached results: {cache_key}")
+        return cached_data
+
+    # If not cached or not successful, call the original function
+    results = find_hivemind_clip_http(query, limit)
+
+    # Cache the results if successful
+    if is_successful(results, limit):
+        print(f"Caching results: {cache_key}")
+        cache.set(cache_key, results)
+        if len(cache) % 100 == 0:
+            print(f"Cache size: {len(cache)}")
+    
+    return results    
+
+
 
 # HTML template for the main page
 HTML_TEMPLATE = """
@@ -340,6 +372,11 @@ def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static'),
                                'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
+@app.route('/robots.txt')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'static'),
+                               'robots.txt')
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     is_vercel = os.getenv('VERCEL', False)
@@ -352,7 +389,7 @@ def index():
         if 'limit' in request.form:
             limit = int(request.form['limit'])
         
-    results = find_hivemind_clip_http(user_input, min(max_results, limit)) if user_input else None
+    results = cached_find_hivemind_clip_http(user_input, min(max_results, limit)) if user_input else None
 
     return render_template_string(HTML_TEMPLATE, results=results, user_input=user_input, limit=limit, is_vercel=is_vercel)
 
