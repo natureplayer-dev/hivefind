@@ -2,7 +2,7 @@ import logging
 import requests
 import os 
 
-from flask import Flask, request, render_template_string, jsonify
+from flask import Flask, request, render_template_string, jsonify, send_from_directory
 
 HF_API_URL = os.environ.get('HF_API_URL')
 HF_API_KEY = os.environ.get('HF_API_KEY')
@@ -332,7 +332,11 @@ HTML_TEMPLATE = """
 </html>
 """
 
-from flask import request, render_template_string, jsonify
+
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'static'),
+                               'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
