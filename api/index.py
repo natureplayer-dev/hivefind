@@ -79,7 +79,9 @@ HTML_TEMPLATE = """
   <script>
     window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
   </script>
+  {% if isvercel %}
   <script defer src="/_vercel/insights/script.js"></script>
+  {% endif %}
   <style>
     /* Custom CSS for uniform card height */
     body {
@@ -336,6 +338,7 @@ HTML_TEMPLATE = """
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
+    is_vercel = os.getenv('VERCEL', False)
     user_input = ""
     limit = 6
     max_results = 30
@@ -347,7 +350,7 @@ def index():
         
     results = find_hivemind_clip_http(user_input, min(max_results, limit)) if user_input else None
 
-    return render_template_string(HTML_TEMPLATE, results=results, user_input=user_input, limit=limit)
+    return render_template_string(HTML_TEMPLATE, results=results, user_input=user_input, limit=limit, is_vercel=is_vercel)
 
 if __name__ == '__main__':
     app.run(debug=True)
