@@ -91,7 +91,7 @@ def cached_find_hivemind_clip_http(query, limit=6):
         print(f"Caching results: {cache_key}")
         cache.set(cache_key, results)
         cache_size += 1
-        if len(cache) % 100 == 0:
+        if cache_size % 100 == 0:
             print(f"Cache size: {cache_size}")
     
     return results    
