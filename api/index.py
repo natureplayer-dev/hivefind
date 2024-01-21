@@ -337,8 +337,6 @@ HTML_TEMPLATE = """
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    print(os.listdir(app.root_path))
-    print(os.path.abspath(app.root_path))
     user_input = ""
     limit = 6
     max_results = 30
