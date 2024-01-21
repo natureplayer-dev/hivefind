@@ -47,9 +47,9 @@ def find_hivemind_clip_http(query, limit=6):
     vector = embed_query_hf(query)
     try:
         results = vector_query_zz(vector, limit=lim_k)['data']
-        print("Success")
+        print("Success.")
     except KeyError:
-        print("Failure")
+        print("Failure.")
         return ["At capacity sorry :( Try again later"]
     for idx, r in enumerate(results):
         results[idx]['video_url'] = results[idx]['video_url'].replace("watch?v=", "embed/").replace("&t=", "?start=")
@@ -95,7 +95,7 @@ def cached_find_hivemind_clip_http(query, limit=6):
     cached_data = get_cache(cache_key)
 
     if cached_data is not None and is_successful(cached_data, limit):
-        print(f"Using cached results: {cache_key}")
+        print(f"Using cached results: {cache_key}.")
         return cached_data
 
     # If not cached or not successful, call the original function
@@ -103,7 +103,7 @@ def cached_find_hivemind_clip_http(query, limit=6):
 
     # Cache the results if successful
     if is_successful(results, limit):
-        print(f"Caching results: {cache_key}")
+        print(f"Caching results: {cache_key}.")
         set_cache(cache_key, results)
 
     return results    
