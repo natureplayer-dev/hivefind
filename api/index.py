@@ -42,7 +42,6 @@ def highlight_matches(text, query):
     return " ".join(text_arr)
 
 def find_hivemind_clip_http(query, limit=6):
-    print(f"Querying for: \"{query}\".")
     lim_k = min(limit, 30)
     vector = embed_query_hf(query)
     try:
@@ -89,6 +88,7 @@ def get_cache(key):
     return None
 
 def cached_find_hivemind_clip_http(query, limit=6):
+    print(f"Querying for: \"{query}\" ({limit}).")
     cache_key = f"find_hivemind_clip:{query}:{limit}"
 
     # Try to get cached data
@@ -97,7 +97,8 @@ def cached_find_hivemind_clip_http(query, limit=6):
     if cached_data is not None and is_successful(cached_data, limit):
         print(f"Using cached results: {cache_key}.")
         return cached_data
-
+    else:
+        print(f"Cache entry not found, computing results.")
     # If not cached or not successful, call the original function
     results = find_hivemind_clip_http(query, limit)
 
