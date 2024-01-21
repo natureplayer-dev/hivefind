@@ -12,6 +12,7 @@ ZZ_API_KEY = os.environ.get('ZZ_API_KEY')
 
 app = Flask(__name__)
 cache = Cache(app, config={'CACHE_TYPE': 'SimpleCache'})
+cache_size = 0
 
 def embed_query_hf(query):
     headers = {"Authorization": f"Bearer {HF_API_KEY}"}
@@ -89,8 +90,9 @@ def cached_find_hivemind_clip_http(query, limit=6):
     if is_successful(results, limit):
         print(f"Caching results: {cache_key}")
         cache.set(cache_key, results)
+        cache_size += 1
         if len(cache) % 100 == 0:
-            print(f"Cache size: {len(cache)}")
+            print(f"Cache size: {cache_size}")
     
     return results    
 
