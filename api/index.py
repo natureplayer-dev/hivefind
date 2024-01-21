@@ -42,7 +42,7 @@ def highlight_matches(text, query):
     return " ".join(text_arr)
 
 def find_hivemind_clip_http(query, limit=6):
-    print(f"Querying for: {query}")
+    print(f"Querying for: \"{query}\".")
     lim_k = min(limit, 30)
     vector = embed_query_hf(query)
     try:
