@@ -79,7 +79,7 @@ HTML_TEMPLATE = """
   <script>
     window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
   </script>
-  {% if isvercel %}
+  {% if is_vercel %}
   <script defer src="/_vercel/insights/script.js"></script>
   {% endif %}
   <style>
