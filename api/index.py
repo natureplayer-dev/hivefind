@@ -2,7 +2,7 @@ import logging
 import requests
 import os 
 
-from flask import Flask, request, render_template_string, jsonify, send_from_directory
+from flask import Flask, request, render_template_string, jsonify, send_from_directory, url_for
 
 HF_API_URL = os.environ.get('HF_API_URL')
 HF_API_KEY = os.environ.get('HF_API_KEY')
@@ -62,7 +62,8 @@ def find_hivemind_clip_http(query, limit=6):
     return results
 
 
-app = Flask(__name__)
+
+app = Flask(__name__, static_folder='.', static_url_path='')
 
 # HTML template for the main page
 HTML_TEMPLATE = """
@@ -74,8 +75,12 @@ HTML_TEMPLATE = """
   <title>HIVEFIND</title>
   <!-- Bootstrap CSS -->
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="icon" href="./static/favicon.ico">
-  <link rel="shortcut icon" href="/static/favicon.ico">
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+  <script>
+    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+  </script>
+  <script defer src="/_vercel/insights/script.js"></script>
   <style>
     /* Custom CSS for uniform card height */
     body {
@@ -326,16 +331,14 @@ HTML_TEMPLATE = """
         document.getElementById('search-form').submit();
     });
 </script>
-<script>
-  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
-</script>
-<script defer src="/_vercel/insights/script.js"></script>
 </html>
 """
 
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
+    print(os.listdir(app.root_path))
+    print(os.path.abspath(app.root_path))
     user_input = ""
     limit = 6
     max_results = 30
