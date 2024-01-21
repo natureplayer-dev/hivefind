@@ -9,7 +9,6 @@ HF_API_KEY = os.environ.get('HF_API_KEY')
 ZZ_API_URL = os.environ.get('ZZ_API_URL')
 ZZ_API_KEY = os.environ.get('ZZ_API_KEY')
 
-
 def embed_query_hf(query):
     headers = {"Authorization": f"Bearer {HF_API_KEY}"}
     return requests.post(HF_API_URL, headers=headers, json={'inputs': query}).json()
@@ -36,8 +35,6 @@ def highlight_matches(text, query):
     return " ".join(text_arr)
 
 def find_hivemind_clip_http(query, limit=6):
-    logging.basicConfig(level=logging.INFO)
-    logging.info(query)
     print(query)
     lim_k = min(limit, 30)
     vector = embed_query_hf(query)
