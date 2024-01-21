@@ -74,7 +74,8 @@ HTML_TEMPLATE = """
   <title>HIVEFIND</title>
   <!-- Bootstrap CSS -->
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="icon" href="/favicon.ico">
+  <link rel="icon" href="./static/favicon.ico">
+  <link rel="shortcut icon" href="./static/favicon.ico">
   <style>
     /* Custom CSS for uniform card height */
     body {
@@ -332,11 +333,6 @@ HTML_TEMPLATE = """
 </html>
 """
 
-
-@app.route('/favicon.ico')
-def favicon():
-    return send_from_directory(os.path.join(app.root_path, 'static'),
-                               'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
