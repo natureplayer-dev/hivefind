@@ -9,6 +9,7 @@ HF_API_KEY = os.environ.get('HF_API_KEY')
 ZZ_API_URL = os.environ.get('ZZ_API_URL')
 ZZ_API_KEY = os.environ.get('ZZ_API_KEY')
 
+
 def embed_query_hf(query):
     headers = {"Authorization": f"Bearer {HF_API_KEY}"}
     return requests.post(HF_API_URL, headers=headers, json={'inputs': query}).json()
