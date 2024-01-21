@@ -74,7 +74,7 @@ HTML_TEMPLATE = """
   <title>HIVEFIND</title>
   <!-- Bootstrap CSS -->
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+  <link rel="icon" href="/favicon.ico">
   <style>
     /* Custom CSS for uniform card height */
     body {
