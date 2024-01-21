@@ -2,7 +2,7 @@ import logging
 import requests
 import os 
 
-from flask import Flask, request, render_template_string, send_from_directory
+from flask import Flask, request, render_template_string, json, send_from_directory
 from flask_caching import Cache
 
 HF_API_URL = os.environ.get('HF_API_URL')
@@ -10,9 +10,11 @@ HF_API_KEY = os.environ.get('HF_API_KEY')
 ZZ_API_URL = os.environ.get('ZZ_API_URL')
 ZZ_API_KEY = os.environ.get('ZZ_API_KEY')
 
+KV_REST_API_TOKEN = os.environ.get('KV_REST_API_TOKEN')
+KV_REST_API_URL = os.environ.get('KV_REST_API_URL')
+
 app = Flask(__name__)
 cache = Cache(app, config={'CACHE_TYPE': 'SimpleCache'})
-cache_size = 0
 
 def embed_query_hf(query):
     headers = {"Authorization": f"Bearer {HF_API_KEY}"}
@@ -68,15 +70,29 @@ def find_hivemind_clip_http(query, limit=6):
         results[idx]['clip_text'] = highlight_matches(results[idx]['clip_text'], query)
     return results
 
-
 def is_successful(cached_data, limit):
     return len(cached_data) == limit
+
+def set_cache(key, value):
+    url = KV_REST_API_URL + '/set/' + key
+    headers = {"Authorization": f"Bearer {KV_REST_API_TOKEN}"}
+    data = {"value": value}
+    response = requests.post(url, headers=headers, json=data)
+    return response.status_code
+
+def get_cache(key):
+    url = KV_REST_API_URL + '/get/' + key
+    headers = {"Authorization": f"Bearer {KV_REST_API_TOKEN}"}
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200 and response.json()['result'] is not None:
+        return json.loads(response.json()['result'])['value']
+    return None
 
 def cached_find_hivemind_clip_http(query, limit=6):
     cache_key = f"find_hivemind_clip:{query}:{limit}"
 
     # Try to get cached data
-    cached_data = cache.get(cache_key)
+    cached_data = get_cache(cache_key)
 
     print(cache_key)
     if cached_data is not None and is_successful(cached_data, limit):
@@ -89,14 +105,9 @@ def cached_find_hivemind_clip_http(query, limit=6):
     # Cache the results if successful
     if is_successful(results, limit):
         print(f"Caching results: {cache_key}")
-        cache.set(cache_key, results)
-        cache_size += 1
-        if cache_size % 100 == 0:
-            print(f"Cache size: {cache_size}")
-    
+        set_cache(cache_key, results)
+
     return results    
-
-
 
 # HTML template for the main page
 HTML_TEMPLATE = """
