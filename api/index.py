@@ -1,4 +1,3 @@
-import logging
 import requests
 import os 
 
@@ -31,7 +30,7 @@ def vector_query_zz(vector, limit=6):
     return requests.post(ZZ_API_URL, headers=headers, json=payload).json() 
 
 def highlight(word):
-    return f"<span class=\"highlight\">{word}</span>" 
+    return f"<span class=\"highlight\">{word}</span>" #text.replace(word, f"\033[{color_code}m{word}\033[0m")
 
 def highlight_matches(text, query):
     q_upper = [w.upper() for w in query.split()]
@@ -163,13 +162,13 @@ HTML_TEMPLATE = """
     }
 
     #clear-button {
-        margin-left: 8px; 
-        border-top-left-radius: 0.25rem;  
+        margin-left: 8px; /* Adds some space between the button and the text box */
+        border-top-left-radius: 0.25rem;  /* Rounded corners on the left side */
         border-bottom-left-radius: 0.25rem;
     }
     #user-input {
-        flex-grow: 1; 
-        border-top-right-radius: 0.25rem;  
+        flex-grow: 1; /* Allows the input to take up the remaining space */
+        border-top-right-radius: 0.25rem;  /* Rounded corners on the right side */
         border-bottom-right-radius: 0.25rem;
     }
     .page-container { 
@@ -185,20 +184,20 @@ HTML_TEMPLATE = """
         padding: 2px;
     }
     .card-deck .card {
-      height: 100%;  
+      height: 100%;  /* Make cards take full height of card-deck */
     }
     .card-body {
       display: flex;
       flex-direction: column;
     }
     .card-body > * {
-      margin-bottom: auto;  
+      margin-bottom: auto;  /* Pushes everything up */
     }
     .embed-responsive {
-      margin-top: auto;  
+      margin-top: auto;  /* Pushes video to bottom */
     }
     .highlight {
-    background-color: #FFFACD;  
+    background-color: #FFFACD;  /* Highlight color */
     }
     .footer-link {
         color: #77CCFF;
@@ -221,9 +220,9 @@ HTML_TEMPLATE = """
     padding: -2px;
     box-sizing: border-box;
     line-height: 39px;
-    background-color: #3286F6;  
-    color: white;                      
-    text-shadow: -1px 1px 1px #000000;  
+    background-color: #3286F6;  /* Highlight color */
+    color: white;                      /* White text color */
+    text-shadow: -1px 1px 1px #000000;  /* Horizontal offset, Vertical offset, Blur radius, Shadow color */
     border: 0px white;
     }
     .hl-yellow {
@@ -234,9 +233,9 @@ HTML_TEMPLATE = """
     padding: -2px;
     box-sizing: border-box;
     line-height: 39px;
-    background-color: #FDC308;  
-    color: white;                      
-    text-shadow: -1px 1px 1px #000000;  
+    background-color: #FDC308;  /* Highlight color */
+    color: white;                      /* White text color */
+    text-shadow: -1px 1px 1px #000000;  /* Horizontal offset, Vertical offset, Blur radius, Shadow color */
     border: 0px white;
     }
     .hl-green {
@@ -247,9 +246,9 @@ HTML_TEMPLATE = """
     padding: -2px;
     box-sizing: border-box;
     line-height: 39px;  
-    background-color: #62D023;  
-    color: white;                      
-    text-shadow: -1px 1px 1px #000000;  
+    background-color: #62D023;  /* Highlight color */
+    color: white;                      /* White text color */
+    text-shadow: -1px 1px 1px #000000;  /* Horizontal offset, Vertical offset, Blur radius, Shadow color */
     border: 0px white;
     }
     .hl-green-last {
@@ -260,9 +259,9 @@ HTML_TEMPLATE = """
     padding: -2px;
     box-sizing: border-box;
     line-height: 39px;  
-    background-color: #62D023;  
-    color: white;                      
-    text-shadow: -1px 1px 1px #000000;  
+    background-color: #62D023;  /* Highlight color */
+    color: white;                      /* White text color */
+    text-shadow: -1px 1px 1px #000000;  /* Horizontal offset, Vertical offset, Blur radius, Shadow color */
     border: 0px white;
     }
     .hl-orange {
@@ -273,9 +272,9 @@ HTML_TEMPLATE = """
     padding: -2px;
     box-sizing: border-box;
     line-height: 39px;
-    background-color: #FE7F20;  
-    color: white;                      
-    text-shadow: -1px 1px 1px #000000;  
+    background-color: #FE7F20;  /* Highlight color */
+    color: white;                      /* White text color */
+    text-shadow: -1px 1px 1px #000000;  /* Horizontal offset, Vertical offset, Blur radius, Shadow color */
     border: 0px white;
     }
   </style>
@@ -296,7 +295,7 @@ HTML_TEMPLATE = """
         </div>
         </div>
         <div>
-        <button type="button" onclick="loadQuery()" class="btn btn-primary">Go</button>
+        <button type="submit" onclick="loadQuery()" class="btn btn-primary">Go</button>
         </div>
     </form>
     {% if results and results|length == 1 %}
@@ -351,12 +350,16 @@ HTML_TEMPLATE = """
         let currentLimit = parseInt(document.getElementById('limit-input').value);
         const newLimit = currentLimit + 6;
         document.getElementById('limit-input').value = newLimit;
+
+        // Trigger form submission
         document.getElementById('search-form').submit();
     }
     function loadQuery() {
         let currentLimit = parseInt(document.getElementById('limit-input').value);
         const newLimit = 6;
         document.getElementById('limit-input').value = newLimit;
+
+        // Trigger form submission
         document.getElementById('search-form').submit();
     }
     function clearText() {
